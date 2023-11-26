@@ -1,8 +1,14 @@
 package com.basicrestfulapi.app.Model.Entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
+@Getter
+@Setter
 @Entity
 @Table(name="tbl_product")
 public class Product implements Serializable {
@@ -13,7 +19,13 @@ public class Product implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    private String namaProduk, deskripsiProduk;
+    @NotEmpty(message = "Nama Produk gaboleh kosong")
+    @Column(name = "nama_produk", length = 50)
+    private String namaProduk;
+
+    @NotEmpty(message = "Deskripsi Produk juga gaboleh kosong")
+    @Column(name = "deskripsi_produk", length = 100)
+    private String deskripsiProduk;
 
     private double harga;
 
@@ -25,38 +37,6 @@ public class Product implements Serializable {
         this.id = id;
         this.namaProduk = namaProduk;
         this.deskripsiProduk = deskripsiProduk;
-        this.harga = harga;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNamaProduk() {
-        return namaProduk;
-    }
-
-    public void setNamaProduk(String namaProduk) {
-        this.namaProduk = namaProduk;
-    }
-
-    public String getDeskripsiProduk() {
-        return deskripsiProduk;
-    }
-
-    public void setDeskripsiProduk(String deskripsiProduk) {
-        this.deskripsiProduk = deskripsiProduk;
-    }
-
-    public double getHarga() {
-        return harga;
-    }
-
-    public void setHarga(double harga) {
         this.harga = harga;
     }
 }

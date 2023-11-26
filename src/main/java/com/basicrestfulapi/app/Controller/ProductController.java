@@ -1,9 +1,16 @@
 package com.basicrestfulapi.app.Controller;
 
+import com.basicrestfulapi.app.DTO.ResponseData;
 import com.basicrestfulapi.app.Model.Entity.Product;
 import com.basicrestfulapi.app.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/product")
@@ -13,13 +20,41 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping
-    public Product buatAtauUpdate(@RequestBody Product product) {
-        return productService.buatAtauUpdate(product);
+    public ResponseEntity<ResponseData<Product>> buatAtauUpdate(@Valid @RequestBody Product product, Errors errors) {
+        ResponseData<Product> responseData = new ResponseData<>();
+
+        if(errors.hasErrors()) {
+            for(ObjectError error : errors.getAllErrors()) {
+                responseData.getMessages().add(error.getDefaultMessage());
+            }
+            responseData.setStatus(false);
+            responseData.setPayload(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
+        else {
+            responseData.setStatus(true);
+            responseData.setPayload(productService.buatAtauUpdate(product)); // ada kemungkinan error juga
+            return ResponseEntity.ok(responseData);
+        }
     }
 
     @PutMapping
-    public Product update(@RequestBody Product product) {
-        return buatAtauUpdate(product);
+    public ResponseEntity<ResponseData<Product>> update(@Valid @RequestBody Product product, Errors errors) {
+        ResponseData<Product> responseData = new ResponseData<>();
+
+        if(errors.hasErrors()) {
+            for(ObjectError error : errors.getAllErrors()) {
+                responseData.getMessages().add(error.getDefaultMessage());
+            }
+            responseData.setStatus(false);
+            responseData.setPayload(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
+        else {
+            responseData.setStatus(true);
+            responseData.setPayload(productService.buatAtauUpdate(product)); // ada kemungkinan error juga
+            return ResponseEntity.ok(responseData);
+        }
     }
 
     @GetMapping("/{id}")
